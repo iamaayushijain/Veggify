@@ -1,4 +1,5 @@
 import express from 'express';
+import { Marked, marked } from 'marked';
 import cors from 'cors';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import 'dotenv/config'; // Load environment variables from .env file
@@ -58,14 +59,22 @@ app.get("/recipestream", (req, res) => {
 const genAI = new GoogleGenerativeAI('AIzaSyCcCUM1I-ng-922QVpQtu1w75-wh7SdoRA');
 
 async function run(prompt, callback) {
-  // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
-  const result = await model.generateContent(prompt);
-  // const response = await result.response;
-  callback(result);
-  // const text = response.text;
-
-  console.log(result);
+  try {
+    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const result = await model.generateContent(prompt);
+    
+    const response = result.response;
+    if (response && response.candidates && response.candidates[0] && response.candidates[0].content && response.candidates[0].content.parts) {
+      const generatedText = marked(response.candidates[0].content.parts.map(part => part.text).join("\n"));
+      console.log("Generated Text:", generatedText);
+      callback(generatedText);  // Send the generated text to the client
+    } else {
+      console.log("No valid response structure found.");
+    }
+  } catch (error) {
+    console.error("Error generating content:", error);
+  }
 }
 
 app.listen(PORT, () => {
