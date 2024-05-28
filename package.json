@@ -14,10 +14,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "firebase": "^10.12.2",
     "marked": "^12.0.2",
     "openai": "^4.47.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-toastify": "^10.0.5",
     "sanitize-html": "^2.13.0"
   },
   "devDependencies": {
