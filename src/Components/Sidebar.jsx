@@ -15,7 +15,7 @@ function Sidebar(){
                 <div  onClick={() => navigate("/recipes")}  className="py-4 cursor-pointer">Recipes</div>
                 <div  onClick={() => navigate("/bookmarks")} className="py-4 cursor-pointer">Bookmarks</div>
                 <div  onClick={() => navigate("/shoppinglist")}  className="py-4 cursor-pointer">Shopping list</div>
-                <div  onClick={() => navigate("/login")}  className="py-4 cursor-pointer">Login</div>
+                <div  onClick={() => navigate("/")}  className="py-4 cursor-pointer">Login</div>
                 
 
 

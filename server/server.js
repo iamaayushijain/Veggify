@@ -3,9 +3,47 @@ import { Marked, marked } from 'marked';
 import cors from 'cors';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import 'dotenv/config'; // Load environment variables from .env file
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import {db } from "../config/firebase";
+import { onAuthStateChanged } from 'firebase/auth';
+
 
 const app = express();
 const PORT = 3001;
+
+const [allergies, setAllergies] = useState([]);
+const [chronicDiseases, setChronicDiseases] = useState([]);
+
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+          setUid(user.uid);
+          checkUserDoc(user.uid);
+          fetchDocument(user.uid);
+      } else {
+          setUid(null);
+      }
+  });
+  return () => unsubscribe();
+}, []);
+
+const fetchDocument = async (userId) => {
+  try {
+      const userDocRef = doc(db, "Demographics", userId);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+          const data = userDoc.data();
+          setAllergies(data.Allergies || []);
+          setChronicDiseases(data.ChronicDiseases || []);
+          setDocExists(true);
+      }
+  } catch (error) {
+      console.log(error);
+      toast.error("An error occurred while fetching your details.");
+  }
+};
+
 
 // Enable CORS for all routes
 app.use(cors());
@@ -30,6 +68,8 @@ app.get("/recipestream", (req, res) => {
     res.send(response);
   };
 
+  
+
   const prompt = [];
   prompt.push("Generate a recipe that incorporates the following details:");
   prompt.push(`[Ingredients: ${ingredients}]`);
@@ -37,6 +77,8 @@ app.get("/recipestream", (req, res) => {
   prompt.push(`[Cuisine Preference: ${cuisine}]`);
   prompt.push(`[Cooking Time: ${cookingTime}]`);
   prompt.push(`[Complexity: ${complexity}]`);
+  prompt.push()
+  
   prompt.push(
     "Please provide a detailed recipe, including steps for preparation and cooking. Only use the ingredients provided."
   );
@@ -56,7 +98,7 @@ app.get("/recipestream", (req, res) => {
 });
 
 // const API_KEY = process.env.GOOGLE_API_KEY; // Ensure your API key is stored in an environment variable
-const genAI = new GoogleGenerativeAI('AIzaSyCcCUM1I-ng-922QVpQtu1w75-wh7SdoRA');
+const genAI = new GoogleGenerativeAI('AIzaSyB1wfV5YQPal4gAbxZcRhLeIgOvyvAH7I0');
 
 async function run(prompt, callback) {
   try {

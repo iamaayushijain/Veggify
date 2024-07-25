@@ -59,7 +59,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center ml-[35vh]">
+    <div className="min-h-screen flex items-center justify-center ml-[18vh] ">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
       
             {!userSigned && 
@@ -132,12 +132,15 @@ function Login() {
         )}</>}
 
         {userSigned && (
+          <>
+          <div className="text-center"> See you soon</div>
           <button
             onClick={logOut}
             className="w-full p-2 mt-6 bg-black text-white rounded hover:bg-gray-800 transition-colors"
           >
             Logout
           </button>
+          </>
         )}
 
         <ToastContainer />
