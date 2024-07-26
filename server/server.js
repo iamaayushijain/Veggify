@@ -97,8 +97,8 @@ app.get("/recipestream", (req, res) => {
   });
 });
 
-// const API_KEY = process.env.GOOGLE_API_KEY; // Ensure your API key is stored in an environment variable
-const genAI = new GoogleGenerativeAI('AIzaSyB1wfV5YQPal4gAbxZcRhLeIgOvyvAH7I0');
+const API_KEY = process.env.GOOGLE_API_KEY; 
+const genAI = new GoogleGenerativeAI('API_KEY');
 
 async function run(prompt, callback) {
   try {
