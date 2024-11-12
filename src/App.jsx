@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route}  from 'react-router-dom'
-import Recipes from "./components/Recipes"
-import Bookmarks from "./components/Bookmarks"
-import GoalTracking from "./components/GoalTracking"
-import Profile from "./components/Profile"
-import Home from "./components/Home"
-import ShoppingList from "./components/ShoppingList"
-import Sidebar from './components/Sidebar'
-import Login from './components/Login'
+import Recipes from './Components/Recipes.jsx'
+import Bookmarks from "./Components/Bookmarks.jsx"
+import GoalTracking from "./Components/GoalTracking.jsx"
+import Profile from "./Components/Profile.jsx"
+import Home from "./Components/Home.jsx"
+import ShoppingList from "./Components/ShoppingList.jsx"
+import Sidebar from './Components/Sidebar.jsx'
+import Login from './Login.jsx'
 import { auth } from './config/firebase';
 import './config/firebase';
 import { useState, useEffect } from 'react'
