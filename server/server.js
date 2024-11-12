@@ -3,46 +3,44 @@ import { Marked, marked } from 'marked';
 import cors from 'cors';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import 'dotenv/config'; // Load environment variables from .env file
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
-import {db } from "../config/firebase";
-import { onAuthStateChanged } from 'firebase/auth';
+
 
 
 const app = express();
 const PORT = 3001;
 
-const [allergies, setAllergies] = useState([]);
-const [chronicDiseases, setChronicDiseases] = useState([]);
+// const [allergies, setAllergies] = useState([]);
+// const [chronicDiseases, setChronicDiseases] = useState([]);
 
-useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-          setUid(user.uid);
-          checkUserDoc(user.uid);
-          fetchDocument(user.uid);
-      } else {
-          setUid(null);
-      }
-  });
-  return () => unsubscribe();
-}, []);
+// useEffect(() => {
+//   const unsubscribe = onAuthStateChanged(auth, (user) => {
+//       if (user) {
+//           setUid(user.uid);
+//           checkUserDoc(user.uid);
+//           fetchDocument(user.uid);
+//       } else {
+//           setUid(null);
+//       }
+//   });
+//   return () => unsubscribe();
+// }, []);
 
-const fetchDocument = async (userId) => {
-  try {
-      const userDocRef = doc(db, "Demographics", userId);
-      const userDoc = await getDoc(userDocRef);
+// const fetchDocument = async (userId) => {
+//   try {
+//       const userDocRef = doc(db, "Demographics", userId);
+//       const userDoc = await getDoc(userDocRef);
 
-      if (userDoc.exists()) {
-          const data = userDoc.data();
-          setAllergies(data.Allergies || []);
-          setChronicDiseases(data.ChronicDiseases || []);
-          setDocExists(true);
-      }
-  } catch (error) {
-      console.log(error);
-      toast.error("An error occurred while fetching your details.");
-  }
-};
+//       if (userDoc.exists()) {
+//           const data = userDoc.data();
+//           setAllergies(data.Allergies || []);
+//           setChronicDiseases(data.ChronicDiseases || []);
+//           setDocExists(true);
+//       }
+//   } catch (error) {
+//       console.log(error);
+//       toast.error("An error occurred while fetching your details.");
+//   }
+// };
 
 
 // Enable CORS for all routes
@@ -98,7 +96,7 @@ app.get("/recipestream", (req, res) => {
 });
 
 const API_KEY = process.env.GOOGLE_API_KEY; 
-const genAI = new GoogleGenerativeAI('API_KEY');
+const genAI = new GoogleGenerativeAI('AIzaSyB1wfV5YQPal4gAbxZcRhLeIgOvyvAH7I0');
 
 async function run(prompt, callback) {
   try {
