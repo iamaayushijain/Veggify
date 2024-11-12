@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { auth, googleProvider } from "./config/firebase";
 import { createUserWithEmailAndPassword, signInWithPopup, signOut, signInWithEmailAndPassword } from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
@@ -7,13 +7,32 @@ import 'react-toastify/dist/ReactToastify.css';
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [LoggedIn, setIsLoggedIn] = useState(true);
   const [isSignIn, setIsSignIn] = useState(true);
-  const [userSigned, setUserSigned] = useState(false);
+
+
+  useEffect(() => {
+    // Set up an authentication state observer
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in
+        setIsLoggedIn(true);
+      } else {
+        // User is signed out
+        setIsLoggedIn(false);
+      }
+    });
+
+    // Clean up the observer on component unmount
+    return () => unsubscribe();
+  }, []);
+
+  
 
   const signUp = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      setUserSigned(true);
+      
       toast.success("Signed up successfully!");
     } catch (err) {
       console.error(err);
@@ -24,7 +43,7 @@ function Login() {
   const signIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      setUserSigned(true);
+      
       toast.success("Signed in successfully!");
     } catch (error) {
       console.error('Error signing in:', error.code, error.message);
@@ -35,7 +54,7 @@ function Login() {
   const logOut = async () => {
     try {
       await signOut(auth);
-      setUserSigned(false);
+      
       toast.success("Logged out successfully!");
     } catch (err) {
       console.error(err);
@@ -46,7 +65,7 @@ function Login() {
   const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      setUserSigned(true);
+     
       toast.success("Signed in with Google successfully!");
     } catch (err) {
       console.error(err);
@@ -54,21 +73,19 @@ function Login() {
     }
   };
 
-  const toggleSignIn = () => {
-    setIsSignIn(!isSignIn);
-  };
+ 
 
   return (
     <div className="min-h-screen flex items-center justify-center ml-[18vh] ">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
       
-            {!userSigned && 
+            {!LoggedIn && 
             <>
               <h2 className="text-2xl font-semibold mb-16 text-center text-black">
           {isSignIn ? "Sign In" : "Sign Up"}
         </h2>
 
-        {!userSigned && (
+        {!LoggedIn && (
           <button
             onClick={signInWithGoogle}
             className="p-2 border-2 border-black font-medium text-black rounded w-full mb-4"
@@ -104,7 +121,7 @@ function Login() {
             <div className="text-center text-sm">
               New user?{" "}
               <button
-                onClick={toggleSignIn}
+              
                 className="text-blue-500 hover:underline"
               >
                 Sign up
@@ -122,7 +139,7 @@ function Login() {
             <div className="text-center text-sm">
               Already Registered?{" "}
               <button
-                onClick={toggleSignIn}
+                
                 className="text-blue-500 hover:underline"
               >
                 Sign in
@@ -131,7 +148,7 @@ function Login() {
           </>
         )}</>}
 
-        {userSigned && (
+        {LoggedIn && (
           <>
           <div className="text-center"> See you soon</div>
           <button

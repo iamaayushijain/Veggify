@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from "../config/firebase"; // Ensure you have initialized Firebase Authentication
 import { onAuthStateChanged } from 'firebase/auth';
+import { getAuth, signOut } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate} from 'react-router-dom'
+
 
 function Profile() {
     const [name1, setName] = useState("");
@@ -18,6 +21,16 @@ function Profile() {
     const [allergyInput, setAllergyInput] = useState("");
     const [allergies, setAllergies] = useState([]);
     const [chronicDiseases, setChronicDiseases] = useState([]);
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            navigate('/'); 
+        } catch (error) {
+            console.error("Logout failed: ", error);
+        }
+    };
 
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
@@ -162,7 +175,9 @@ function Profile() {
 
     return (
         <div className="">
+            <div className='flex'>
             <div className='pt-[5vh] font-semibold text-3xl text-[#] '>Profile Details</div>
+            </div>
             <div className="font-medium flex flex-col gap-2 mt-[5vh]  border px-[40vh] rounded-sm  py-[5vh] ">
                 <div className="flex gap-4">
                     <label className="w-20">Name: </label>

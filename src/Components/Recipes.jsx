@@ -106,9 +106,9 @@ const RecipeCard = ({ onSubmit }) => {
             onChange={(e) => setComplexity(e.target.value)}
           />
         </div>
-        <div className="px-6 py-4">
+        <div className="flex justify-center py-4">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-blue-500 hover:bg-blue-700 text-white justify-content justify-center font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
             onClick={handleSubmit}
           >
